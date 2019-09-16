@@ -2,7 +2,11 @@ package com.lalit.ds.basic.linkedlist;
 
 import java.util.HashSet;
 import java.util.Set;
-
+/**
+ * TODO Start from Problem number 14 till 24
+ * And then match solutions
+ * Link - https://www.geeksforgeeks.org/data-structures/linked-list/
+ * **/
 public class LinkedListDS<T> {
     Node node;
 
@@ -25,14 +29,14 @@ public class LinkedListDS<T> {
     public boolean remove(T element) {
         Node<T> tempNode = node;
         Node<T> previouNode = null;
+        if (tempNode != null && tempNode.value == element) {
+            node = tempNode.nextNode;
+            return true;
+        }
         while (tempNode != null) {
             Node<T> nextNode = tempNode.nextNode;
             if (tempNode.value == element) {
-                if ((previouNode != null && nextNode == null) || (previouNode != null && nextNode != null)) {
-                    previouNode.nextNode = nextNode;
-                } else {
-                    node = tempNode.nextNode;
-                }
+                previouNode.nextNode = nextNode;
                 return true;
             }
             previouNode = tempNode;
@@ -45,14 +49,14 @@ public class LinkedListDS<T> {
         Node<T> tempNode = node;
         Node<T> previouNode = null;
         int currentIndex = 0;
-        while (tempNode != null) {
+        if (index == 0) {
+            node = tempNode.nextNode;
+            return true;
+        }
+        while (tempNode != null && currentIndex <= index) {
             Node<T> nextNode = tempNode.nextNode;
             if (currentIndex == index) {
-                if ((previouNode != null && nextNode == null) || (previouNode != null && nextNode != null)) {
-                    previouNode.nextNode = nextNode;
-                } else {
-                    node = tempNode.nextNode;
-                }
+                previouNode.nextNode = nextNode;
                 return true;
             }
             ++currentIndex;
@@ -73,6 +77,9 @@ public class LinkedListDS<T> {
         return size;
     }
 
+    /**TODO This solution seems too complex to understand look at solution 25, seems easy but mindful
+     * https://www.geeksforgeeks.org/data-structures/linked-list/
+     * **/
     public void reverse() {
         node = reverse(node, new Node<T>());
     }
@@ -124,12 +131,29 @@ public class LinkedListDS<T> {
         return tempNode;
     }
 
-    //TODO
+    //
     public Node getFromEndIndex(int index) {
-        return null;
+        Node<T> main_ptr = node;
+        Node<T> another_ptr = node;
+
+        if (another_ptr != null) {
+            while (index > 1) {
+                another_ptr = another_ptr.nextNode;
+                if (another_ptr == null) {
+                    System.out.println("Null pointer");
+                    return null;
+                }
+                --index;
+            }
+        }
+        while (another_ptr.nextNode != null) {
+            another_ptr = another_ptr.nextNode;
+            main_ptr = main_ptr.nextNode;
+        }
+        return main_ptr;
     }
 
-    //TODO
+    //
     public Node getFromHeadIndex(int index) {
         return null;
     }

@@ -48,9 +48,12 @@ public class LinkedListDSTest {
         //integerLinkedListDS.add(3);
        // integerLinkedListDS.node.nextNode.nextNode.nextNode.nextNode = integerLinkedListDS.node;
         integerLinkedListDS.removeLoop();
-       integerLinkedListDS.add(45);
+       integerLinkedListDS.add(6);
+        integerLinkedListDS.add(7);
+        integerLinkedListDS.add(8);
 
-        System.out.println(integerLinkedListDS.findMiddleNode().value);
+        //System.out.println(integerLinkedListDS.findMiddleNode().value);
+        System.out.println(integerLinkedListDS.getFromEndIndex(4).value);
     }
 
     public static void main(String... s) {
