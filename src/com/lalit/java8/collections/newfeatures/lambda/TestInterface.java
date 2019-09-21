@@ -1,4 +1,4 @@
-package com.lalit.java8.newfeatures.lambda;
+package com.lalit.java8.collections.newfeatures.lambda;
 
 public interface TestInterface {
     public String test(String content);

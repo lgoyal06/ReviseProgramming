@@ -1,4 +1,4 @@
-package com.lalit.java8.newfeatures.lambda;
+package com.lalit.java8.collections.newfeatures.lambda;
 
 public class Person {
     public Person(String gender, int age) {
