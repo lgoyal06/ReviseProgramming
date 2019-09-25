@@ -78,6 +78,8 @@ public class AggragationFunctionExample {
          //Collections.sort(personList);
         personList.stream().sorted().filter(p->p.getAge()>22).map(Person::getAge).collect(Collectors.toList()).forEach(p->System.out.println(p));
         personList.parallelStream().sorted().filter(p->p.getAge()>22).map(Person::getAge).collect(Collectors.toList()).forEach(p->System.out.println(p));
+        personList.stream().peek(p->System.out.println(p.getSex())).forEach(p->System.out.println(p));
         ConcurrentMap map = personList.parallelStream().collect(Collectors.groupingByConcurrent(Person::getSex));
+
     }
 }
