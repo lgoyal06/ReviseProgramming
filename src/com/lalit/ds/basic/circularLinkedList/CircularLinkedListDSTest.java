@@ -1,5 +1,7 @@
 package com.lalit.ds.basic.circularLinkedList;
 
+import com.lalit.ds.basic.linkedlist.LinkedListDS;
+
 import java.util.List;
 
 public class CircularLinkedListDSTest {
@@ -10,9 +12,7 @@ public class CircularLinkedListDSTest {
         integerCircularLinkedListDS.add(4);
 
 
-        integerCircularLinkedListDS.toList().stream().forEach(e-> System.out.println(e));
-        ////System.out.println(integerLinkedListDS.size());
-
+        integerCircularLinkedListDS.toList().stream().forEach(e -> System.out.println(e));
         List<CircularLinkedListDS<Integer>> list = integerCircularLinkedListDS.splitIntoHalf();
         System.out.println(list);
         CircularLinkedListDS<Integer> integerCircularLinkedListDS1 = new CircularLinkedListDS<>();
@@ -48,12 +48,23 @@ public class CircularLinkedListDSTest {
         integerCircularLinkedListDS7.add(4);
         integerCircularLinkedListDS7.remove(1);
         System.out.println(integerCircularLinkedListDS1);
-/** Iterator
- *  CircularLinkedListDS.IteratorCircularLinkedList iterator = integerCircularLinkedListDS.getIterator();
+        CircularLinkedListDS<Integer> integerCircularLinkedListDS127 = new CircularLinkedListDS<>();
+        integerCircularLinkedListDS127.sortedInsert(10);
+        integerCircularLinkedListDS127.sortedInsert(16);
+        integerCircularLinkedListDS127.sortedInsert(9);
+        integerCircularLinkedListDS127.sortedInsert(12);
+        integerCircularLinkedListDS127.sortedInsert(121);
+        System.out.println(integerCircularLinkedListDS127);
+        LinkedListDS<Integer> ls = new LinkedListDS<>();
+        ls.add(12);
+        ls.add(121);
+        ls.add(123);
+        System.out.println(ls.isLoopExists());
+/** Iterator**/
+ CircularLinkedListDS.IteratorCircularLinkedList iterator = integerCircularLinkedListDS.getIterator();
  while (iterator != null) {
  System.out.println(iterator.next());
  }
- ***/
     }
 
     public static void main(String... s) {

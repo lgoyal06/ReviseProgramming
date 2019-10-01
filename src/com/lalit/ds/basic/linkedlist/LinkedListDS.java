@@ -1,16 +1,38 @@
 package com.lalit.ds.basic.linkedlist;
 
+import com.lalit.ds.basic.circularLinkedList.CircularLinkedListDS;
+
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
  * And then match solutions
  * Link - https://www.geeksforgeeks.org/data-structures/linked-list/#singlyLinkedList
  **/
 public class LinkedListDS<T> {
-    Node node;
+    public Node<T> node;
 
+    public Node<T> toNodes() {
+        Node<T> tempNode = node;
+        LinkedListDS<T> deepCopy = new LinkedListDS<>();
+        while (tempNode != null) {
+            deepCopy.add(tempNode.value);
+            tempNode = tempNode.nextNode;
+        }
+        return deepCopy.node;
+    }
+
+    //Detect and remove loop in linked list
+    public boolean isLoopExists() {
+        Node<T> tempNode = node;
+        while (tempNode != null) {
+            if (tempNode.nextNode == node) {
+                return true;
+            }
+            tempNode = tempNode.nextNode;
+        }
+        return false;
+    }
     public void add(T element) {
         Node<T> tempNode = node;
         if (node == null) {
@@ -133,7 +155,6 @@ public class LinkedListDS<T> {
         return tempNode;
     }
 
-    //
     public Node getFromEndIndex(int index) {
         Node<T> main_ptr = node;
         Node<T> another_ptr = node;
@@ -170,13 +191,12 @@ public class LinkedListDS<T> {
         return node;
     }
 
-    //
     public Node<Integer> segragateEvenOddValueNodes() {
         Node<Integer> evenNode = null;
         Node<Integer> evenNodeEnd = null;
         Node<Integer> oddNode = null;
         Node<Integer> oddNodeEnd = null;
-        Node<Integer> tempNode = node;
+        Node<Integer> tempNode = (Node<Integer>) node;
         while (tempNode != null) {
             Node<Integer> newNode = new Node<>();
             newNode.value = tempNode.value;
@@ -270,7 +290,6 @@ public class LinkedListDS<T> {
         }
         return linkedListDSNew;
     }
-
 
     public void removeDuplicateFromSortedList() {
         Node<T> tempNode = node;
@@ -374,12 +393,7 @@ public class LinkedListDS<T> {
         }
     }
 
-    //TODO QuickSort on Singly Linked List
-    public void quickSort() {
-
-    }
-
-    static class Node<T> {
+    public static class Node<T> {
         public Node getNextNode() {
             return nextNode;
         }
