@@ -10,6 +10,13 @@ import java.util.Set;
 /**
  * TODO
  * Task 1 - Complete Problem 6,9,11,15,16 from https://www.geeksforgeeks.org/data-structures/linked-list/
+ *
+ * 6. Convert a Binary Tree to a Circular Doubly Link List
+ * 9. Circular Queue | Set 2 (Circular Linked List Implementation)
+ * 11. Josephus Circle using circular linked list
+ * 15. Implementation of Deque using circular array
+ * 16. Exchange first and last nodes in Circular Linked List
+ *
  * Circular Linked List :
  * Task2 - Compare Solutions and understand best and optimised way
  **/
