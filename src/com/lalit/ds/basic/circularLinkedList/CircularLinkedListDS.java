@@ -1,6 +1,7 @@
 package com.lalit.ds.basic.circularLinkedList;
 
 import com.lalit.ds.basic.linkedlist.LinkedListDS;
+import com.lalit.ds.basic.tree.TreeDS;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -9,14 +10,11 @@ import java.util.Set;
 
 /**
  * TODO
- * Task 1 - Complete Problem 6,9,11,15,16 from https://www.geeksforgeeks.org/data-structures/linked-list/
- *
+ * Task 1 - Complete Problem 6,11 from https://www.geeksforgeeks.org/data-structures/linked-list/
+ * <p>
  * 6. Convert a Binary Tree to a Circular Doubly Link List
- * 9. Circular Queue | Set 2 (Circular Linked List Implementation)
  * 11. Josephus Circle using circular linked list
- * 15. Implementation of Deque using circular array
- * 16. Exchange first and last nodes in Circular Linked List
- *
+ * <p>
  * Circular Linked List :
  * Task2 - Compare Solutions and understand best and optimised way
  **/
@@ -27,21 +25,8 @@ public class CircularLinkedListDS<T> {
     class IteratorCircularLinkedList<T> implements IteratorCustom<T> {
         private Node<T> node;
 
-        public IteratorCircularLinkedList() {
-            this.node = deepCopy((Node<T>) CircularLinkedListDS.this.head);
-        }
-
-        public Node<T> deepCopy(Node<T> node) {
-            Node<T> temp = node;
-            CircularLinkedListDS<T> copy = new CircularLinkedListDS<>();
-            while (temp != null) {
-                copy.add(temp.value);
-                temp = temp.nextNode;
-                if (temp.hashCode() == node.hashCode()) {
-                    break;
-                }
-            }
-            return copy.head;
+        public IteratorCircularLinkedList(Node<T> nodeCopy) {
+            this.node = nodeCopy;
         }
 
         public T next() {
@@ -51,8 +36,21 @@ public class CircularLinkedListDS<T> {
         }
     }
 
+    private Node<T> deepCopy() {
+        Node<T> temp = head;
+        CircularLinkedListDS<T> copy = new CircularLinkedListDS<>();
+        while (temp != null) {
+            copy.add(temp.value);
+            temp = temp.nextNode;
+            if (temp.hashCode() == head.hashCode()) {
+                break;
+            }
+        }
+        return copy.head;
+    }
+
     public IteratorCircularLinkedList<T> getIterator() {
-        return new IteratorCircularLinkedList<T>();
+        return new IteratorCircularLinkedList<T>(deepCopy());
     }
 
     public List<Integer> toList() {
@@ -188,17 +186,148 @@ public class CircularLinkedListDS<T> {
     }
 
     // Count Nodes
-    private int size() {
+    public int size() {
         Node<T> tempNode = head;
-        int size = 0;
-        if(tempNode == null){
+        int size = 1;
+        if (tempNode == null) {
             return size;
         }
-        while (tempNode.nextNode != null && tempNode.nextNode == head) {
+        while (tempNode.nextNode != null && tempNode.nextNode != head) {
             ++size;
             tempNode = tempNode.nextNode;
         }
         return size;
+    }
+
+    // Count Nodes
+    public int size(Node<T> head) {
+        Node<T> tempNode = head;
+        int size = 1;
+        if (tempNode == null) {
+            return size;
+        }
+        while (tempNode.nextNode != null && tempNode.nextNode != head) {
+            ++size;
+            tempNode = tempNode.nextNode;
+        }
+        return size;
+    }
+
+    public void swapFirstAndLastNodes() {
+        Node<T> tempNode = head;
+        Node<T> previousNode = null;
+        if (head == tail && previousNode == null) {
+            return;
+        } else if (head.nextNode == tail) {
+            head = tail;
+            tail = tempNode;
+            return;
+        } else {
+            while (tempNode != tail) {
+                previousNode = tempNode;
+                tempNode = tempNode.nextNode;
+            }
+            previousNode.nextNode = head;
+            tempNode.nextNode = head.nextNode;
+            head.nextNode = tempNode;
+            tail = head;
+            head = tempNode;
+            return;
+        }
+    }
+
+    public void insertFront(T element) {
+        Node<T> tempNode = head;
+        Node<T> newNode = new Node<>();
+        newNode.value = element;
+        newNode.nextNode = tempNode;
+        head = newNode;
+        if (tail == null) {
+            tail = head;
+            head.nextNode = head;
+        } else {
+            tail.nextNode = head;
+        }
+    }
+
+    public void insertRear(T element) {
+        Node<T> tempNode = head;
+        Node<T> newNode = new Node<>();
+        newNode.value = element;
+        newNode.nextNode = head;
+        if (head == null) {
+            head = tail = newNode;
+            head.nextNode = head;
+        } else {
+            while (tempNode.nextNode != tail)
+                tempNode = tempNode.nextNode;
+            tempNode.nextNode.nextNode = newNode;
+            tail = newNode;
+        }
+    }
+
+    public boolean deleteFront() {
+        if (head == null) {
+            throw new RuntimeException("Nothing to delete");
+        } else if (head == tail) {
+            head = tail = null;
+        } else {
+            head = head.nextNode;
+            tail.nextNode = head;
+        }
+        return true;
+    }
+
+    public boolean deleteRear() {
+        Node<T> tempNode = head;
+        if (head == null) {
+            throw new RuntimeException("Nothing to delete");
+        } else if (head == tail) {
+            head = tail = null;
+        } else {
+            while (tempNode.nextNode != tail)
+                tempNode = tempNode.nextNode;
+            tempNode.nextNode = head;
+            tail = tempNode;
+        }
+        return true;
+    }
+
+    public void enQueue(T element) {
+        insertRear(element);
+    }
+
+    public boolean deQueue() {
+        return deleteFront();
+    }
+
+    /**
+     * TODO  11
+     **/
+
+    public int josephusCircleLastRemainder(int lenOfCircle, int countToChoseNext) {
+        for (Integer i = 0; i < lenOfCircle; ++i) {
+            add((T) i);
+        }
+        Node<T> tempNode = deepCopy();
+        Node<T> preNode = null;
+        while (size(tempNode) > 1) {
+            int skipCounter = 0;
+            while (skipCounter < countToChoseNext) {
+                preNode = tempNode;
+                tempNode = tempNode.nextNode;
+                ++skipCounter;
+            }
+            preNode.nextNode = tempNode.nextNode;
+            tempNode = tempNode.nextNode;
+        }
+        System.out.println(tempNode);
+        return 0;
+    }
+
+    //TODO 6
+    public CircularLinkedListDS<T> treeToCircularLL(TreeDS tree) {
+        return null;
     }
 
     private static class Node<T> {
