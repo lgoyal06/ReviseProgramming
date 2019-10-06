@@ -1,6 +1,7 @@
 package com.lalit.ds.basic.circularLinkedList;
 
 import com.lalit.ds.basic.linkedlist.LinkedListDS;
+import com.lalit.ds.basic.tree.TreeDS;
 
 import java.util.List;
 
@@ -112,10 +113,16 @@ public class CircularLinkedListDSTest {
         circularQueue.enQueue(14);
         circularQueue.enQueue(22);
         circularQueue.enQueue(-6);
-        circularQueue.toList().stream().forEach(e -> System.out.print(e + "--->"));
+        //circularQueue.toList().stream().forEach(e -> System.out.print(e + "--->"));
         CircularLinkedListDS<Integer> circularQueue1 = new CircularLinkedListDS<>();
-        circularQueue1.josephusCircleLastRemainder(5,3);
-
+//        System.out.println(circularQueue1.josephusCircleLastRemainder(4,2));
+        TreeDS<Integer> treeList= new TreeDS<Integer>();
+        treeList.add(2);
+        treeList.add(3);
+        treeList.add(7);
+        treeList.add(1);
+        treeList.add(89);
+        treeList.treeTraverseLRR();
     }
 
     public static void main(String... s) {

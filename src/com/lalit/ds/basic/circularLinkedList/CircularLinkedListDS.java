@@ -9,14 +9,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * TODO
- * Task 1 - Complete Problem 6,11 from https://www.geeksforgeeks.org/data-structures/linked-list/
+ * TODO Task 1 - Complete Problem 6 from https://www.geeksforgeeks.org/data-structures/linked-list/
  * <p>
  * 6. Convert a Binary Tree to a Circular Doubly Link List
- * 11. Josephus Circle using circular linked list
  * <p>
  * Circular Linked List :
- * Task2 - Compare Solutions and understand best and optimised way
+ * TODO Task2 - Compare Solutions and understand best and optimised way
  **/
 public class CircularLinkedListDS<T> {
     private Node<T> head;
@@ -301,19 +299,15 @@ public class CircularLinkedListDS<T> {
         return deleteFront();
     }
 
-    /**
-     * TODO  11
-     **/
-
     public int josephusCircleLastRemainder(int lenOfCircle, int countToChoseNext) {
         for (Integer i = 0; i < lenOfCircle; ++i) {
             add((T) i);
         }
         Node<T> tempNode = deepCopy();
         Node<T> preNode = null;
-        while (size(tempNode) > 1) {
+        while (size(tempNode) != 1) {
             int skipCounter = 0;
-            while (skipCounter < countToChoseNext) {
+            while (skipCounter < countToChoseNext-1) {
                 preNode = tempNode;
                 tempNode = tempNode.nextNode;
                 ++skipCounter;
@@ -321,11 +315,10 @@ public class CircularLinkedListDS<T> {
             preNode.nextNode = tempNode.nextNode;
             tempNode = tempNode.nextNode;
         }
-        System.out.println(tempNode);
-        return 0;
+        return (Integer) tempNode.value+1;
     }
 
-    //TODO 6
+    //TODO 6 Task 1
     public CircularLinkedListDS<T> treeToCircularLL(TreeDS tree) {
         return null;
     }
