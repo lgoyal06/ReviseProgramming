@@ -1,12 +1,9 @@
-package com.lalit.ds.basic.circularLinkedList;
+package com.lalit.ds.basic.circularDoublyLL;
 
-import com.lalit.ds.basic.linkedlist.LinkedListDS;
 import com.lalit.ds.basic.tree.TreeDS;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * TODO Task 1 - Complete Problem 6 from https://www.geeksforgeeks.org/data-structures/linked-list/
@@ -16,7 +13,7 @@ import java.util.Set;
  * Circular Linked List :
  * TODO Task2 - Compare Solutions and understand best and optimised way
  **/
-public class CircularLinkedListDS<T> {
+public class CircularDoublyLinkedListDS<T> {
     private Node<T> head;
     private Node<T> tail;
 
@@ -36,7 +33,7 @@ public class CircularLinkedListDS<T> {
 
     private Node<T> deepCopy() {
         Node<T> temp = head;
-        CircularLinkedListDS<T> copy = new CircularLinkedListDS<>();
+        CircularDoublyLinkedListDS<T> copy = new CircularDoublyLinkedListDS<>();
         while (temp != null) {
             copy.add(temp.value);
             temp = temp.nextNode;
@@ -86,12 +83,12 @@ public class CircularLinkedListDS<T> {
         }
     }
 
-    public List<CircularLinkedListDS<T>> splitIntoHalf() {
+    public List<CircularDoublyLinkedListDS<T>> splitIntoHalf() {
         Node<T> nodePointer1 = head;
         Node<T> nodePointer2 = head.nextNode.nextNode;
-        List<CircularLinkedListDS<T>> list = new ArrayList<>();
-        CircularLinkedListDS<T> firstHalf = new CircularLinkedListDS<>();
-        CircularLinkedListDS<T> secondHalf = new CircularLinkedListDS<>();
+        List<CircularDoublyLinkedListDS<T>> list = new ArrayList<>();
+        CircularDoublyLinkedListDS<T> firstHalf = new CircularDoublyLinkedListDS<>();
+        CircularDoublyLinkedListDS<T> secondHalf = new CircularDoublyLinkedListDS<>();
         firstHalf.add(nodePointer1.value);
         while (nodePointer2.hashCode() != head.hashCode() && nodePointer2.nextNode.hashCode() != head.hashCode()) {
             nodePointer2 = nodePointer2.nextNode.nextNode;
@@ -319,7 +316,7 @@ public class CircularLinkedListDS<T> {
     }
 
     //TODO 6 Task 1
-    public CircularLinkedListDS<T> treeToCircularLL(TreeDS tree) {
+    public CircularDoublyLinkedListDS<T> treeToCircularLL(TreeDS tree) {
         tree.inorderTraveral(this);
         return this;
     }

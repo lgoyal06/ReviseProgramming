@@ -12,8 +12,8 @@ public class CircularLinkedListDSTest {
         integerCircularLinkedListDS.add(3);
         integerCircularLinkedListDS.add(4);
         CircularLinkedListDS.IteratorCircularLinkedList iterator = integerCircularLinkedListDS.getIterator();
-       // while (iterator != null) {
-         //   System.out.println(iterator.next());
+        // while (iterator != null) {
+        //   System.out.println(iterator.next());
         //}
 
         //integerCircularLinkedListDS.toList().stream().forEach(e -> System.out.println(e));
@@ -116,13 +116,17 @@ public class CircularLinkedListDSTest {
         //circularQueue.toList().stream().forEach(e -> System.out.print(e + "--->"));
         CircularLinkedListDS<Integer> circularQueue1 = new CircularLinkedListDS<>();
 //        System.out.println(circularQueue1.josephusCircleLastRemainder(4,2));
-        TreeDS<Integer> treeList= new TreeDS<Integer>();
+        TreeDS<Integer> treeList = new TreeDS<Integer>();
+        treeList.add(4);
         treeList.add(2);
-        treeList.add(3);
         treeList.add(7);
+        treeList.add(3);
         treeList.add(1);
         treeList.add(89);
-        treeList.treeTraverseLRR();
+        treeList.add(21);
+        CircularLinkedListDS<Integer> circularLinkedListDS = new CircularLinkedListDS<>();
+        circularLinkedListDS.treeToCircularLL(treeList);
+        circularLinkedListDS.toList().stream().forEach(e -> System.out.println(e));
     }
 
     public static void main(String... s) {
