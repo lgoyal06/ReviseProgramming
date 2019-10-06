@@ -40,7 +40,7 @@ private Node<T> root;
             treeTraverseLRR(tempNode.right);
 
     }
-    private static class Node<T> {
+    private class Node<T> {
         public Node<T> getRight() {
             return right;
         }
