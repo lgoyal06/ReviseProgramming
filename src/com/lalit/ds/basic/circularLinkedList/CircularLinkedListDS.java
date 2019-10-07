@@ -9,11 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * TODO Task 1 - Complete Problem 6 from https://www.geeksforgeeks.org/data-structures/linked-list/
- * <p>
- * 6. Convert a Binary Tree to a Circular Doubly Link List
- * <p>
- * Circular Linked List :
  * TODO Task2 - Compare Solutions and understand best and optimised way
  **/
 public class CircularLinkedListDS<T> {
@@ -318,7 +313,6 @@ public class CircularLinkedListDS<T> {
         return (Integer) tempNode.value + 1;
     }
 
-    //TODO 6 Task 1
     public CircularLinkedListDS<T> treeToCircularLL(TreeDS tree) {
         tree.inorderTraveral(this);
         return this;
