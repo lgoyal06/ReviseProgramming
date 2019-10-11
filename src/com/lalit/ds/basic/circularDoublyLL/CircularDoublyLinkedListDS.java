@@ -6,26 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * TODO Starts from Problem 5
  **/
 public class CircularDoublyLinkedListDS<T> {
-    private Node<T> head;
+    Node<T> head;
     private Node<T> tail;
 
-    class IteratorCircularLinkedList<T> implements IteratorCustom<T> {
-        private Node<T> node;
-
-        public IteratorCircularLinkedList(Node<T> nodeCopy) {
-            this.node = nodeCopy;
-        }
-
-        public T next() {
-            T value = (T) node.value;
-            this.node = node.nextNode;
-            return value;
-        }
-    }
-
-    private Node<T> deepCopy() {
+    public Node<T> deepCopy() {
         Node<T> temp = head;
         CircularDoublyLinkedListDS<T> copy = new CircularDoublyLinkedListDS<>();
         while (temp != null) {
@@ -56,265 +43,89 @@ public class CircularDoublyLinkedListDS<T> {
     }
 
     public void add(T element) {
-        Node<T> tempNode = head;
         if (head == null) {
             Node<T> newNode = new Node<>();
             newNode.value = element;
             tail = head = newNode;
             head.nextNode = head;
-        } else {
-            while (tempNode.nextNode != null) {
-                tempNode = tempNode.nextNode;
-                if (tempNode.nextNode.hashCode() == head.hashCode()) {
-                    break;
-                }
-            }
-            Node<T> newNode = new Node<>();
-            newNode.value = element;
-            tempNode.nextNode = newNode;
-            newNode.nextNode = head;
-            tail = newNode;
+            head.previousNode = head;
+            return;
         }
-    }
-
-    public List<CircularDoublyLinkedListDS<T>> splitIntoHalf() {
-        Node<T> nodePointer1 = head;
-        Node<T> nodePointer2 = head.nextNode.nextNode;
-        List<CircularDoublyLinkedListDS<T>> list = new ArrayList<>();
-        CircularDoublyLinkedListDS<T> firstHalf = new CircularDoublyLinkedListDS<>();
-        CircularDoublyLinkedListDS<T> secondHalf = new CircularDoublyLinkedListDS<>();
-        firstHalf.add(nodePointer1.value);
-        while (nodePointer2.hashCode() != head.hashCode() && nodePointer2.nextNode.hashCode() != head.hashCode()) {
-            nodePointer2 = nodePointer2.nextNode.nextNode;
-            nodePointer1 = nodePointer1.nextNode;
-            firstHalf.add(nodePointer1.value);
-        }
-        while (nodePointer1.nextNode != null && nodePointer1.nextNode.hashCode() != head.hashCode()) {
-            secondHalf.add(nodePointer1.nextNode.value);
-            nodePointer1 = nodePointer1.nextNode;
-        }
-        list.add(firstHalf);
-        list.add(secondHalf);
-        return list;
-
-    }
-
-    //Sorted insert for circular linked list
-    public boolean sortedInsert(T element) {
         Node<T> tempNode = head;
-        Node<T> previousNode = null;
-        //First element to add
-        if (head == null) {
-            Node<T> newNode = new Node<>();
-            newNode.value = element;
-            tail = head = newNode;
-            head.nextNode = head;
-            return true;
-        } else {
-            while (tempNode.nextNode != null) {
-                Integer intVal = (Integer) element;
-                if ((Integer) tempNode.value > intVal) {
-                    Node<T> newNode = new Node<>();
-                    newNode.value = element;
-                    newNode.nextNode = tempNode;
-                    //Add at starting point
-                    if (previousNode == null) {
-                        head = newNode;
-                        tail.nextNode = head;
-                    }
-                    //Add at middle point
-                    else {
-                        previousNode.nextNode = newNode;
-                    }
-                    return true;
-                }
-                if (tempNode.nextNode.hashCode() == head.hashCode()) {
-                    break;
-                }
-                previousNode = tempNode;
-                tempNode = tempNode.nextNode;
-
+        while (tempNode.nextNode != null) {
+            tempNode = tempNode.nextNode;
+            if (tempNode.nextNode.hashCode() == head.hashCode()) {
+                Node<T> newNode = new Node<>();
+                newNode.value = element;
+                tempNode.nextNode = newNode;
+                head.previousNode = newNode;
+                newNode.nextNode = head;
+                newNode.previousNode = tempNode;
+                tail = newNode;
+                return;
             }
-            //Add at the end
-            Node<T> newNode = new Node<>();
-            newNode.value = element;
-            tempNode.nextNode = newNode;
-            newNode.nextNode = head;
-            tail = newNode;
+
+        }
+    }
+
+    public boolean remove(Node<T> nodeToDelete) {
+        Node<T> tempNode = head;
+        if (nodeToDelete == tempNode && tempNode.nextNode == tempNode && tempNode == tempNode.previousNode) {
+            head = tail = null;
             return true;
         }
-    }
-
-    public boolean remove(T element) {
-        Node<T> tempNode = head;
-        Node<T> previouNode = null;
-        while (tempNode != null) {
-            Node<T> nextNode = tempNode.nextNode;
-            if (tempNode.value == element) {
-                if (nextNode == head) {
-                    if (previouNode != null) {
-                        previouNode.nextNode = tempNode.nextNode;
-                        tail = previouNode;
-                    } else {
-                        head = tail = null;
-                    }
-                } else if (previouNode != null) {
-                    previouNode.nextNode = nextNode;
-                } else {
-                    head = head.nextNode;
-                    tail.nextNode = head;
+        while (tempNode.nextNode != head) {
+            if (tempNode == nodeToDelete) {
+                tempNode.previousNode.nextNode = tempNode.nextNode;
+                tempNode.nextNode.previousNode = tempNode.previousNode;
+                if (head == tempNode) {
+                    head = tempNode.previousNode;
+                } else if (tail == tempNode) {
+                    tail = tempNode.previousNode;
                 }
                 return true;
             }
-            previouNode = tempNode;
             tempNode = tempNode.nextNode;
-            if (tempNode == head)
-                return false;
         }
         return false;
     }
 
-    // Count Nodes
-    public int size() {
-        Node<T> tempNode = head;
-        int size = 1;
-        if (tempNode == null) {
-            return size;
+    public void reverse() {
+        Node<T> currentNode = head;
+        Node<T> nextNode = null;
+
+        //Swap Next and Previous Node Pointer of Current Node
+        while (currentNode.nextNode != head) {
+            nextNode = currentNode.nextNode;
+            swapPointersOfCurrentNode(currentNode, nextNode);
+            currentNode = nextNode;
         }
-        while (tempNode.nextNode != null && tempNode.nextNode != head) {
-            ++size;
-            tempNode = tempNode.nextNode;
-        }
-        return size;
+
+        //Swap tail node pointers
+        nextNode = currentNode.nextNode;
+        swapPointersOfCurrentNode(currentNode, nextNode);
+
+        //Swap Head and tail pointers
+        currentNode = head;
+        head = tail;
+        tail = currentNode;
     }
 
-    // Count Nodes
-    public int size(Node<T> head) {
-        Node<T> tempNode = head;
-        int size = 1;
-        if (tempNode == null) {
-            return size;
-        }
-        while (tempNode.nextNode != null && tempNode.nextNode != head) {
-            ++size;
-            tempNode = tempNode.nextNode;
-        }
-        return size;
+    private void swapPointersOfCurrentNode(Node<T> tempNode, Node<T> nextNode) {
+        tempNode.nextNode = tempNode.previousNode;
+        tempNode.previousNode = nextNode;
     }
 
-    public void swapFirstAndLastNodes() {
-        Node<T> tempNode = head;
-        Node<T> previousNode = null;
-        if (head == tail && previousNode == null) {
-            return;
-        } else if (head.nextNode == tail) {
-            head = tail;
-            tail = tempNode;
-            return;
-        } else {
-            while (tempNode != tail) {
-                previousNode = tempNode;
-                tempNode = tempNode.nextNode;
-            }
-            previousNode.nextNode = head;
-            tempNode.nextNode = head.nextNode;
-            head.nextNode = tempNode;
-            tail = head;
-            head = tempNode;
-            return;
-        }
-    }
-
-    public void insertFront(T element) {
-        Node<T> tempNode = head;
-        Node<T> newNode = new Node<>();
-        newNode.value = element;
-        newNode.nextNode = tempNode;
-        head = newNode;
-        if (tail == null) {
-            tail = head;
-            head.nextNode = head;
-        } else {
-            tail.nextNode = head;
-        }
-    }
-
-    public void insertRear(T element) {
-        Node<T> tempNode = head;
-        Node<T> newNode = new Node<>();
-        newNode.value = element;
-        newNode.nextNode = head;
-        if (head == null) {
-            head = tail = newNode;
-            head.nextNode = head;
-        } else {
-            while (tempNode.nextNode != tail)
-                tempNode = tempNode.nextNode;
-            tempNode.nextNode.nextNode = newNode;
-            tail = newNode;
-        }
-    }
-
-    public boolean deleteFront() {
-        if (head == null) {
-            throw new RuntimeException("Nothing to delete");
-        } else if (head == tail) {
-            head = tail = null;
-        } else {
-            head = head.nextNode;
-            tail.nextNode = head;
-        }
-        return true;
-    }
-
-    public boolean deleteRear() {
-        Node<T> tempNode = head;
-        if (head == null) {
-            throw new RuntimeException("Nothing to delete");
-        } else if (head == tail) {
-            head = tail = null;
-        } else {
-            while (tempNode.nextNode != tail)
-                tempNode = tempNode.nextNode;
-            tempNode.nextNode = head;
-            tail = tempNode;
-        }
-        return true;
-    }
-
-    public void enQueue(T element) {
-        insertRear(element);
-    }
-
-    public boolean deQueue() {
-        return deleteFront();
-    }
-
-    public int josephusCircleLastRemainder(int lenOfCircle, int countToChoseNext) {
-        for (Integer i = 0; i < lenOfCircle; ++i) {
-            add((T) i);
-        }
-        Node<T> tempNode = deepCopy();
-        Node<T> preNode = null;
-        while (size(tempNode) != 1) {
-            int skipCounter = 0;
-            while (skipCounter < countToChoseNext - 1) {
-                preNode = tempNode;
-                tempNode = tempNode.nextNode;
-                ++skipCounter;
-            }
-            preNode.nextNode = tempNode.nextNode;
-            tempNode = tempNode.nextNode;
-        }
-        return (Integer) tempNode.value + 1;
-    }
-
-    public CircularDoublyLinkedListDS<T> treeToCircularLL(TreeDS tree) {
+    public CircularDoublyLinkedListDS<T> treeToCircularDLL(TreeDS tree) {
         tree.inorderTraveral(this);
         return this;
     }
 
-    private static class Node<T> {
+    static class Node<T> {
+        Node<T> nextNode;
+        Node<T> previousNode;
+        T value;
+
         public Node<T> getNextNode() {
             return nextNode;
         }
@@ -323,8 +134,27 @@ public class CircularDoublyLinkedListDS<T> {
             this.nextNode = nextNode;
         }
 
-        Node<T> nextNode;
-        T value;
+        public Node<T> getPreviousNode() {
+            return previousNode;
+        }
+
+        public void setPreviousNode(Node<T> previousNode) {
+            this.previousNode = previousNode;
+        }
+    }
+
+    class IteratorCircularLinkedList<T> implements IteratorCustom<T> {
+        private Node<T> node;
+
+        public IteratorCircularLinkedList(Node<T> nodeCopy) {
+            this.node = nodeCopy;
+        }
+
+        public T next() {
+            T value = (T) node.value;
+            this.node = node.nextNode;
+            return value;
+        }
     }
 
 }
