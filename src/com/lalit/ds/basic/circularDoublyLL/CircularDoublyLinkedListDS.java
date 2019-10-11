@@ -7,6 +7,9 @@ import java.util.List;
 
 /**
  * TODO Starts from Problem 5
+ * https://www.geeksforgeeks.org/a-linked-list-with-next-and-arbit-pointer/
+ *
+ * https://www.geeksforgeeks.org/data-structures/linked-list/
  **/
 public class CircularDoublyLinkedListDS<T> {
     Node<T> head;
