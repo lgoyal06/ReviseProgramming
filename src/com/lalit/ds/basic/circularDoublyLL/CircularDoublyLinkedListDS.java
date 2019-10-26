@@ -6,10 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO Starts from Problem 5
- * https://www.geeksforgeeks.org/a-linked-list-with-next-and-arbit-pointer/
- *
- * https://www.geeksforgeeks.org/data-structures/linked-list/
+ * TODO 15-16th Pick top 6 problems FROM 5th problem and just solve them by own
+ * TODO From 17th Jump on to Skip List must , complete idea by 18th
  **/
 public class CircularDoublyLinkedListDS<T> {
     Node<T> head;
@@ -122,6 +120,65 @@ public class CircularDoublyLinkedListDS<T> {
     public CircularDoublyLinkedListDS<T> treeToCircularDLL(TreeDS tree) {
         tree.inorderTraveral(this);
         return this;
+    }
+
+    //TODO redesign solution 19th oct 2019
+    public void swapNodes(int kthNodeIndex) throws Exception {
+        Node<T> tempNode = head;
+        Node<T> pointerKthNodeFromStart = head;
+        Node<T> pointerKthNodeFromEnd = head;
+        int counter = 1;
+        while (tempNode.nextNode != head) {
+            if (counter < kthNodeIndex)
+                pointerKthNodeFromStart = tempNode = tempNode.nextNode;
+            else {
+                pointerKthNodeFromEnd = pointerKthNodeFromEnd.nextNode;
+                tempNode = tempNode.nextNode;
+            }
+            ++counter;
+        }
+        if (counter < kthNodeIndex) {
+            throw new Exception("Length of Given List is less than kth Node");
+        } else {
+            if (pointerKthNodeFromEnd == pointerKthNodeFromStart) {
+            } else if (pointerKthNodeFromStart.nextNode == pointerKthNodeFromEnd) {
+                swapConsecutiveNodes(pointerKthNodeFromStart, pointerKthNodeFromEnd);
+            } else if (pointerKthNodeFromStart == pointerKthNodeFromEnd.nextNode) {
+                swapConsecutiveNodes(pointerKthNodeFromEnd, pointerKthNodeFromStart);
+            } else {
+
+                //TODO Optimise solution to in co-operate scenario when swapping nodes are consecutive
+                Node<T> prevStartNode = pointerKthNodeFromStart.previousNode;
+                Node<T> nextStartNode = pointerKthNodeFromStart.nextNode;
+                Node<T> prevEndNode = pointerKthNodeFromEnd.previousNode;
+                Node<T> nextEndNode = pointerKthNodeFromEnd.nextNode;
+                if (nextStartNode == prevEndNode) {
+
+                }
+                prevStartNode.nextNode = pointerKthNodeFromEnd;
+                pointerKthNodeFromEnd.previousNode = prevStartNode;
+                pointerKthNodeFromEnd.nextNode = nextStartNode;
+                nextStartNode.previousNode = pointerKthNodeFromEnd;
+
+                prevEndNode.nextNode = pointerKthNodeFromStart;
+                pointerKthNodeFromStart.previousNode = prevEndNode;
+                nextEndNode.previousNode = pointerKthNodeFromStart;
+                pointerKthNodeFromStart.nextNode = nextEndNode;
+            }
+        }
+    }
+
+    private void swapConsecutiveNodes(Node<T> pointerKthNodeFromStart, Node<T> pointerKthNodeFromEnd) {
+
+        pointerKthNodeFromStart.previousNode.nextNode = pointerKthNodeFromEnd;
+        pointerKthNodeFromEnd.previousNode = pointerKthNodeFromStart.previousNode;
+
+        Node<T> temp = pointerKthNodeFromEnd.nextNode;
+        pointerKthNodeFromStart.nextNode = pointerKthNodeFromEnd.nextNode;
+        pointerKthNodeFromStart.previousNode = pointerKthNodeFromEnd;
+
+        pointerKthNodeFromEnd.nextNode = pointerKthNodeFromStart;
+        temp.previousNode = pointerKthNodeFromStart;
     }
 
     static class Node<T> {
