@@ -1,5 +1,7 @@
 package com.lalit.ds.basic.skiplist;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -11,25 +13,30 @@ public class SkipListImpl<T> {
     Node<T> head;
 
     public boolean insert(T value) {
-        Node<T> tempNode = head;
-        Node<T> newNode = new Node(value);
-        if (tempNode == null) {
-            Node<T> minusInfinityNode = new Node(-1000000000);
-            newNode.preNode = minusInfinityNode;
-            minusInfinityNode.nextNode = newNode;
-            head = minusInfinityNode;
-            return true;
-        } else {
-            Node<T> searchedNode = searchNodeByVal(value);
-            if (searchedNode.value != value) {
-                insertNode(newNode, searchedNode);
-                while (coinFlip() == 1) {
-                    newNode = promoteToNextLevel(newNode);
-                }
+        try {
+            Node<T> tempNode = head;
+            Node<T> newNode = new Node(value);
+            if (tempNode == null) {
+                Node<T> minusInfinityNode = new Node(-1000000000);
+                newNode.preNode = minusInfinityNode;
+                minusInfinityNode.nextNode = newNode;
+                head = minusInfinityNode;
                 return true;
+            } else {
+                Node<T> searchedNode = searchNodeByVal(value);
+                if (!(compare(searchedNode.value, value) == 0)) {
+                    insertNode(newNode, searchedNode);
+                    while (coinFlip() == 1) {
+                        newNode = promoteToNextLevel(newNode);
+                    }
+                    return true;
+                }
+                return false;
             }
+        } catch (Exception e) {
             return false;
         }
+
     }
 
     private void insertNode(Node<T> newNode, Node<T> searchedNode) {
@@ -113,6 +120,20 @@ public class SkipListImpl<T> {
         return counter;
     }
 
+    public List<T> toList() {
+        List<T> list = new ArrayList<>();
+        Node<T> tempNode = head;
+        while (tempNode.downLevelNode != null) {
+            tempNode = tempNode.downLevelNode;
+        }
+        list.add(tempNode.value);
+        while (tempNode.nextNode != null) {
+            list.add(tempNode.nextNode.value);
+            tempNode = tempNode.nextNode;
+        }
+        return list;
+    }
+
     public boolean deleteElement(T value) {
         Node<T> nodeToDelete = searchNodeByVal(value);
         if (nodeToDelete != null && nodeToDelete.value == value) {
@@ -128,19 +149,33 @@ public class SkipListImpl<T> {
     }
 
     private Node<T> searchNodeByVal(T value) {
-        Node<T> tempNode = head;
-        while (tempNode.nextNode != null || tempNode.downLevelNode != null) {
-            if (tempNode.nextNode == null || (Integer) tempNode.nextNode.value > (Integer) value) {
-                if (tempNode.downLevelNode == null) {
-                    return tempNode;
+        try {
+            Node<T> tempNode = head;
+            while (tempNode.nextNode != null || tempNode.downLevelNode != null) {
+                if (tempNode.nextNode == null || compare(tempNode.nextNode.value, value) > 0) {
+                    if (tempNode.downLevelNode == null) {
+                        return tempNode;
+                    }
+                    tempNode = tempNode.downLevelNode;
+                } else if (compare(tempNode.nextNode.value, value) < 0) {
+                    tempNode = tempNode.nextNode;
+                } else if (compare(tempNode.nextNode.value, value) == 0) {
+                    return tempNode.nextNode;
                 }
-                tempNode = tempNode.downLevelNode;
-            } else if ((Integer) tempNode.nextNode.value < (Integer) value) {
-                tempNode = tempNode.nextNode;
-            } else if (((Integer) tempNode.nextNode.value).equals((Integer) value)) {
-                return tempNode.nextNode;
             }
+            return tempNode;
+        } catch (Exception e) {
+            return null;
         }
-        return tempNode;
+    }
+
+    private int compare(T val1, T val2) throws Exception {
+        String getClassSimpleName = val1.getClass().getSimpleName();
+        switch (getClassSimpleName) {
+            case "Integer":
+                return ((Integer) val1).compareTo((Integer) val2);
+            default:
+                throw new Exception();
+        }
     }
 }

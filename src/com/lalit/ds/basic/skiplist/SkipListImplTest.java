@@ -3,7 +3,7 @@ package com.lalit.ds.basic.skiplist;
 
 import org.junit.Test;
 
-public class SkipListImplTest {
+public class SkipListImplTest{
 
     @Test
     public void addFirstElementExpectAddedCorrectlyToSkipList() {
@@ -53,7 +53,9 @@ public class SkipListImplTest {
         skipList.deleteElement(3);
         skipList.insert(4533);
         skipList.insert(4533);
-        assert skipList.size() == 5;
+        System.out.println(skipList.size());
+        skipList.toList().stream().forEach(e->System.out.println(e));
+        assert skipList.size() == 4;
 
     }
 }
