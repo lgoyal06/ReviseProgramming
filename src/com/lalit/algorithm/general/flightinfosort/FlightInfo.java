@@ -7,7 +7,7 @@ import java.time.LocalTime;
 
 public class FlightInfo {
 
-    private int flightNumber;
+    private String flightNumber;
     private String deptLocation;
     private String arrivalLocation;
     private double flightDuration;
@@ -29,7 +29,7 @@ public class FlightInfo {
 
     public static class FlightInfoBuilder {
 
-        private int flightNumber;
+        private String flightNumber;
         private String deptLocation;
         private String arrivalLocation;
         private double flightDuration;
@@ -38,7 +38,7 @@ public class FlightInfo {
         private LocalTime time;
         private LocalDateTime dateTime;
 
-        public FlightInfoBuilder setFlightNumber(int flightNumber) {
+        public FlightInfoBuilder setFlightNumber(String flightNumber) {
             this.flightNumber = flightNumber;
             return this;
         }
