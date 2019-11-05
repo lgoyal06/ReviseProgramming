@@ -1,11 +1,38 @@
-package com.lalit.algorithm.general.flightinfosort;
+package com.lalit.algorithm.general.flightinfosort.main;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class FlightInfo {
+
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+
+    public String getDeptLocation() {
+        return deptLocation;
+    }
+
+    public String getArrivalLocation() {
+        return arrivalLocation;
+    }
+
+    public double getFlightDuration() {
+        return flightDuration;
+    }
+
+    public BigDecimal getFare() {
+        return fare;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
 
     private String flightNumber;
     private String deptLocation;
@@ -14,7 +41,6 @@ public class FlightInfo {
     private BigDecimal fare;
     private LocalDate date;
     private LocalTime time;
-    private LocalDateTime dateTime;
 
     public FlightInfo(FlightInfoBuilder flightInfoBuilder) {
         this.flightNumber = flightInfoBuilder.flightNumber;
@@ -24,6 +50,19 @@ public class FlightInfo {
         this.fare = flightInfoBuilder.fare;
         this.date = flightInfoBuilder.date;
         this.time = flightInfoBuilder.time;
+    }
+
+    @Override
+    public String toString() {
+        return "FlightInfo{" +
+                "flightNumber='" + flightNumber + '\'' +
+                ", deptLocation='" + deptLocation + '\'' +
+                ", arrivalLocation='" + arrivalLocation + '\'' +
+                ", flightDuration=" + flightDuration +
+                ", fare=" + fare +
+                ", date=" + date +
+                ", time=" + time +
+                '}';
     }
 
 
@@ -36,7 +75,6 @@ public class FlightInfo {
         private BigDecimal fare;
         private LocalDate date;
         private LocalTime time;
-        private LocalDateTime dateTime;
 
         public FlightInfoBuilder setFlightNumber(String flightNumber) {
             this.flightNumber = flightNumber;
