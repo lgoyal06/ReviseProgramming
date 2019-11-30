@@ -43,7 +43,7 @@ public class HeapDSUtils {
         return array;
     }
 
-    // Insert element
+    // Insert element O(log(n))
     public static boolean insert(int value) {
         int[] newArray = createBiggerArray(heapifiedArray, value);
         int latestValIndex = newArray.length - 1;
@@ -71,8 +71,7 @@ public class HeapDSUtils {
         return newArray;
     }
 
-    //TODO get Kth Largest Element
-    // Delete element
+    // Delete element O(log(n))
     public static int delete() {
         int maxVal = heapifiedArray[0];
         int[] remainingArray = copyArrayWithMaxVal(heapifiedArray);
