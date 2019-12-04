@@ -26,8 +26,8 @@ public class PatternFinderMultiThreadedSolution {
             }));
         }
         for (Future<List<Integer>> taskFutureObj : listOfFutures) {
-            while (!taskFutureObj.isDone()){
-
+            while (!taskFutureObj.isDone()) {
+                Thread.yield();
             }
             listOfLines.add(taskFutureObj.get());
         }
