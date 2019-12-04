@@ -1,8 +1,8 @@
-package com.lalit.parallel.programming.test.java.edu.coursera.parallel;
+package com.lalit.java8.collections.newfeatures.parallel.programming.test.java.edu.coursera.parallel;
 
 import java.util.Random;
 
-import com.lalit.parallel.programming.main.java.edu.coursera.parallel.ReciprocalArraySum;
+import com.lalit.java8.collections.newfeatures.parallel.programming.main.java.edu.coursera.parallel.ReciprocalArraySum;
 import junit.framework.TestCase;
 
 public class ReciprocalArraySumTest extends TestCase {

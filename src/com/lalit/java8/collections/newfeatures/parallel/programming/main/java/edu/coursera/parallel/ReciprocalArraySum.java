@@ -1,4 +1,4 @@
-package com.lalit.parallel.programming.main.java.edu.coursera.parallel;
+package com.lalit.java8.collections.newfeatures.parallel.programming.main.java.edu.coursera.parallel;
 
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
