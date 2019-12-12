@@ -9,7 +9,7 @@ public class HeapDSUtils {
 
     private static int[] heapifiedArray;
 
-    //TODO Max Heapify fix it Not correct 1st December 2019
+    //TODO Max Heapify fix it, it is not correct 11th December 2019
     //https://www.youtube.com/watch?v=HqPJF2L5h9U Time 42:50
     public static int[] maxHeapify(int[] arrayToSort) {
         int[] sortedArray = arrayToSort;

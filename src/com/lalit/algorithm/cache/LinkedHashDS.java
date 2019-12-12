@@ -1,3 +1,9 @@
+package com.lalit.algorithm.cache;
+
+
+import com.sun.org.apache.regexp.internal.RE;
+
+//TODO Complete Removal of element by element and from head
 public class LinkedHashDS<K, T> {
 
     Node[] bucket = new Node[10];
@@ -5,6 +11,8 @@ public class LinkedHashDS<K, T> {
     Node<K, T> head;
     Node<K, T> tail;
 
+    //TODO Add element to tail
+    //TODO remove element from LinkedList if it already exists
     public boolean put(K key, T value) {
         Node node = bucket[hash(key)];
         bucket[hash(key)] = addElement(key, value, node);
@@ -15,7 +23,7 @@ public class LinkedHashDS<K, T> {
         Node tempNode = head;
         int count = 0;
         while (tempNode != null) {
-            tempNode = tempNode.next;
+            tempNode = tempNode.after;
             ++count;
         }
         return count;
@@ -46,24 +54,38 @@ public class LinkedHashDS<K, T> {
         return rootNode;
     }
 
-    private boolean remove(K key, Node<K, T> rootNode) {
+    private Node<K, T> remove(K key, Node<K, T> rootNode) {
         Node tempNode = rootNode;
         while (tempNode != null) {
             if (tempNode.key.equals(key)) {
                 if (tempNode.previous != null)
                     tempNode.previous.next = tempNode.next;
-                if (tempNode.next != null)
+                else if (tempNode.next != null)
                     tempNode.next.previous = tempNode.previous;
-                return true;
+
+                if (tempNode.before != null) {
+                    tempNode.before.next = tempNode.after;
+                } else if (tempNode.after != null) {
+                    tempNode.after.before = tempNode.before;
+                }
+                if ((tempNode.previous == null && tempNode.next == null) || (tempNode.before == null && tempNode.after == null)) {
+                    tempNode = null;
+                }
+                return tempNode;
             }
             tempNode = tempNode.next;
         }
+        return null;
+    }
+
+    //TODO Remove from tail in case size is exceeded
+    public boolean remove() {
         return false;
     }
 
+    //TODO Remove by element evict
     public boolean remove(K key) {
-        Node node = bucket[hash(key)];
-        remove(key, node);
+        bucket[hash(key)] = remove(key, bucket[hash(key)]);
         return true;
     }
 
