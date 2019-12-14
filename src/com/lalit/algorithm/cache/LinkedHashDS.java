@@ -78,8 +78,8 @@ public class LinkedHashDS<K, T> {
         return null;
     }
 
-    //TODO Remove from tail in case size is exceeded
-    public boolean remove() {
+    //TODO Remove from tail in case size is exceeded called by put method
+    private boolean remove() {
         return false;
     }
 
