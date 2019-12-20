@@ -3,7 +3,7 @@ package com.lalit.ds.basic.heap;
 import java.util.function.Consumer;
 
 //Usage Heap Data Structure
-//TODO Do a visit again, try to understand again 21 December 2019
+//TODO Do a visit again and  do time complexity analysis again in details 21 December 2019
 //https://www.youtube.com/watch?v=B7hVxCmfPtM&t=2570s
 //Operations
 //Delete
