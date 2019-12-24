@@ -1,21 +1,37 @@
 package com.lalit.algorithm.cache;
 
-
-import com.sun.org.apache.regexp.internal.RE;
-
-//TODO Complete Removal of element by element and from head
 public class LinkedHashDS<K, T> {
 
-    Node[] bucket = new Node[10];
+    Node<K, T>[] bucket = new Node[10];
 
     Node<K, T> head;
     Node<K, T> tail;
 
-    //TODO Add element to tail
-    //TODO remove element from LinkedList if it already exists
+    public LinkedHashDS(int limit) {
+        this.limit = limit;
+    }
+
+    int limit;
+
     public boolean put(K key, T value) {
         Node node = bucket[hash(key)];
-        bucket[hash(key)] = addElement(key, value, node);
+        Node existingNode = search(node, key);
+        //If element already exists
+        if (existingNode != null) {
+            existingNode.value = value;
+            if (!head.key.equals(existingNode.key)) {
+                existingNode.before.after = existingNode.after;
+                existingNode.after.before = existingNode.before;
+                existingNode.before = null;
+                existingNode.after = head;
+                head.before = existingNode;
+                head = existingNode;
+            }
+
+        } else {
+            //Add new element
+            bucket[hash(key)] = addElement(key, value, node);
+        }
         return true;
     }
 
@@ -36,20 +52,25 @@ public class LinkedHashDS<K, T> {
             if (head == null)
                 head = tail = rootNode;
             else {
-                tail.after = rootNode;
-                tail.after.before = tail;
-                tail = tail.after;
+                // Node tempHead = head;
+                head.before = rootNode;
+                rootNode.after = head;
+                head = rootNode;
             }
         } else {
-            Node tempNode = rootNode;
-            while (tempNode.next != null) {
-                tempNode = tempNode.next;
+            if (size() < limit) {
+                Node tempNode = rootNode;
+                while (tempNode.next != null) {
+                    tempNode = tempNode.next;
+                }
+                tempNode.next = newNode;
+                tempNode.next.previous = tempNode;
+                head.before = newNode;
+                newNode.after = head;
+                head = newNode;
+            } else {
+                //eviction from tail
             }
-            tempNode.next = newNode;
-            tempNode.next.previous = tempNode;
-            tail.after = newNode;
-            tail.after.before = tail;
-            tail = tail.after;
         }
         return rootNode;
     }
@@ -87,6 +108,34 @@ public class LinkedHashDS<K, T> {
     public boolean remove(K key) {
         bucket[hash(key)] = remove(key, bucket[hash(key)]);
         return true;
+    }
+
+    private Node<K, T> search(Node node, K key) {
+        Node tempNode = node;
+        while (tempNode != null) {
+            if (tempNode.key.equals(key)) {
+                return tempNode;
+            }
+            tempNode = tempNode.next;
+        }
+        return null;
+    }
+
+    //Search for an element and if found move it to Head
+    public T search(K key) {
+        Node<K, T> node = bucket[hash(key)];
+        Node<K, T> nodeToSearch = search(node, key);
+        if (nodeToSearch != null) {
+            if (!head.key.equals(nodeToSearch.key)) {
+                nodeToSearch.before.after = nodeToSearch.after;
+                nodeToSearch.after.before = nodeToSearch.before;
+                nodeToSearch.before = null;
+                nodeToSearch.after = head;
+                head.before = nodeToSearch;
+                head = nodeToSearch;
+            }
+        }
+        return nodeToSearch != null ? nodeToSearch.value : null;
     }
 
     private int hash(K element) {
