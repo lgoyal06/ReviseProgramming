@@ -6,12 +6,11 @@ public class LinkedHashDS<K, T> {
 
     Node<K, T> head;
     Node<K, T> tail;
+    int limit;
 
     public LinkedHashDS(int limit) {
         this.limit = limit;
     }
-
-    int limit;
 
     public boolean put(K key, T value) {
         Node node = bucket[hash(key)];
@@ -27,7 +26,6 @@ public class LinkedHashDS<K, T> {
                 head.before = existingNode;
                 head = existingNode;
             }
-
         } else {
             //Add new element
             bucket[hash(key)] = addElement(key, value, node);
@@ -42,23 +40,34 @@ public class LinkedHashDS<K, T> {
             tempNode = tempNode.after;
             ++count;
         }
+        System.out.println(count);
         return count;
     }
 
+    public void printElement() {
+        Node tempNode = head;
+        while (tempNode != null) {
+            System.out.println("Key:" + tempNode.key + " " + "Value:" + tempNode.value);
+            tempNode = tempNode.after;
+        }
+    }
+
     private Node<K, T> addElement(K key, T value, Node<K, T> rootNode) {
-        Node newNode = new Node(key, value);
-        if (rootNode == null) {
-            rootNode = newNode;
-            if (head == null)
-                head = tail = rootNode;
-            else {
-                // Node tempHead = head;
-                head.before = rootNode;
-                rootNode.after = head;
-                head = rootNode;
-            }
+        if (size() == limit) {
+            bucket[hash(tail.key)] = remove(tail.key, bucket[hash(tail.key)]);
+            addElement(key, value, rootNode);
         } else {
-            if (size() < limit) {
+            Node newNode = new Node(key, value);
+            if (rootNode == null) {
+                rootNode = newNode;
+                if (head == null)
+                    head = tail = rootNode;
+                else {
+                    head.before = rootNode;
+                    rootNode.after = head;
+                    head = rootNode;
+                }
+            } else {
                 Node tempNode = rootNode;
                 while (tempNode.next != null) {
                     tempNode = tempNode.next;
@@ -68,8 +77,6 @@ public class LinkedHashDS<K, T> {
                 head.before = newNode;
                 newNode.after = head;
                 head = newNode;
-            } else {
-                //eviction from tail
             }
         }
         return rootNode;
@@ -81,16 +88,27 @@ public class LinkedHashDS<K, T> {
             if (tempNode.key.equals(key)) {
                 if (tempNode.previous != null)
                     tempNode.previous.next = tempNode.next;
-                else if (tempNode.next != null)
+
+                if (tempNode.next != null)
                     tempNode.next.previous = tempNode.previous;
 
-                if (tempNode.before != null) {
-                    tempNode.before.next = tempNode.after;
-                } else if (tempNode.after != null) {
+                if (tempNode.after != null) {
                     tempNode.after.before = tempNode.before;
+                } else {
+                    tail = tail.before;
                 }
-                if ((tempNode.previous == null && tempNode.next == null) || (tempNode.before == null && tempNode.after == null)) {
+                if (tempNode.before != null) {
+                    tempNode.before.after = tempNode.after;
+                } else {
+                    head = head.after;
+                }
+
+                if ((tempNode.previous == null && tempNode.next == null)) {
                     tempNode = null;
+                } else if (tempNode.previous == null) {
+                    tempNode = tempNode.next;
+                } else if (tempNode.next == null) {
+                    tempNode = tempNode.previous;
                 }
                 return tempNode;
             }
@@ -99,12 +117,6 @@ public class LinkedHashDS<K, T> {
         return null;
     }
 
-    //TODO Remove from tail in case size is exceeded called by put method
-    private boolean remove() {
-        return false;
-    }
-
-    //TODO Remove by element evict
     public boolean remove(K key) {
         bucket[hash(key)] = remove(key, bucket[hash(key)]);
         return true;
@@ -125,16 +137,6 @@ public class LinkedHashDS<K, T> {
     public T search(K key) {
         Node<K, T> node = bucket[hash(key)];
         Node<K, T> nodeToSearch = search(node, key);
-        if (nodeToSearch != null) {
-            if (!head.key.equals(nodeToSearch.key)) {
-                nodeToSearch.before.after = nodeToSearch.after;
-                nodeToSearch.after.before = nodeToSearch.before;
-                nodeToSearch.before = null;
-                nodeToSearch.after = head;
-                head.before = nodeToSearch;
-                head = nodeToSearch;
-            }
-        }
         return nodeToSearch != null ? nodeToSearch.value : null;
     }
 
@@ -154,6 +156,7 @@ public class LinkedHashDS<K, T> {
             this.value = value;
             this.key = key;
         }
+
 
     }
 
