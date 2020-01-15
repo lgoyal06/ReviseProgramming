@@ -35,12 +35,7 @@ class LoggerHandler implements InvocationHandler {
         this.target = target;
     }
 
-    BiFunction<Integer, Integer, Integer> biFunction = new BiFunction<Integer, Integer, Integer>() {
-        @Override
-        public Integer apply(Integer integer, Integer integer2) {
-            return integer + integer2;
-        }
-    };
+    BiFunction<Integer, Integer, Integer> biFunction = (integer, integer2) -> integer + integer2;
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
