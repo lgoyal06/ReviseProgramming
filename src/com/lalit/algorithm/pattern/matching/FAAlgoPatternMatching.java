@@ -4,6 +4,7 @@ public class FAAlgoPatternMatching {
 
     /***
      * TODO Use KMP Algo concept of lps of 17th Jan 2020
+     * Complete Algo on 17th Jan 2020 must
      *
      * lps[i] = the longest proper prefix of pat[0..i]
      *               which is also a suffix of pat[0..i].
