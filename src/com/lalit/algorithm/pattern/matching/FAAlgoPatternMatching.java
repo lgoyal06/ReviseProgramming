@@ -1,9 +1,13 @@
 package com.lalit.algorithm.pattern.matching;
 
-public class FAAlgoPatternMatching {
+import com.sun.org.apache.regexp.internal.RE;
+
+public final class FAAlgoPatternMatching {
+
 
     /***
-     * TODO Use KMP Algo concept of lps of 17th Jan 2020
+     * TODO  Complete Algo with Time complexity by 29th Jan 2020
+     * This Algo is used to find all occurrences of pattern in given text
      * Complete Algo on 17th Jan 2020 must
      *
      * lps[i] = the longest proper prefix of pat[0..i]
@@ -11,24 +15,64 @@ public class FAAlgoPatternMatching {
      *
      * Also calculate its Time complexity
      * @param initialTable
-     * @param patternChars
      * @param distinctChars
      * @return
      */
-    public static int[][] buildFATable(int[][] initialTable, char[] patternChars, char[] distinctChars) {
-        for (char ch1 : patternChars) {
-            int i = 0;
+    public static int[][] buildFATable(int[][] initialTable, char[] distinctChars, int totalStates, String pattern, int[] resetFunctionForPattern) {
+        int currentStateIndex = 0;
+        while (currentStateIndex < totalStates) {
+            String currentPattern = pattern.substring(0, currentStateIndex + 1);
+            int currentPatternLength = currentPattern.length();
+            int j = 0;
             for (char ch2 : distinctChars) {
-                int j = 0;
-                if (ch1 == ch2 && ch2 == patternChars[0]) {
-                    initialTable[i][j] = 0;
-                } else if (ch2 == patternChars[i + 1]) {
-                    initialTable[i][j] = 0;
-                }
+                initialTable[currentStateIndex][j] = calculateResetValForCharAtCurrentIndex(ch2, currentPatternLength, resetFunctionForPattern, pattern.toCharArray());
                 ++j;
             }
+            ++currentStateIndex;
         }
-        return null;
+        int j = 0;
+        for (char ch2 : distinctChars) {
+            initialTable[currentStateIndex][j] = calculateResetValForCharAtCurrentIndex(ch2, pattern.length(), resetFunctionForPattern, pattern.toCharArray());
+            ++j;
+        }
+        return initialTable;
+    }
+
+    //TODO Calculate Time complexity
+    private static int[] buildResetTableForPattern(String pattern) {
+        char[] chars = pattern.toCharArray();
+        int[] resetVal = new int[chars.length];
+        int i = 1, j = 0;
+        resetVal[0] = 0;
+        while (i < chars.length) {
+            if (chars[i] == chars[j]) {
+                resetVal[i] = ++j;
+                ++i;
+            } else if (j > 0) {
+                j = resetVal[j - 1];
+            } else {
+                resetVal[i] = 0;
+                ++i;
+            }
+        }
+        return resetVal;
+    }
+
+    //TODO Complete this method
+    //TODO Calculate Time complexity
+    private static int calculateResetValForCharAtCurrentIndex(char currentChar, int currentIndex, int[] resetFunction, char[] patternChar) {
+        if (currentChar == patternChar[currentIndex - 1]) {
+            return currentIndex;
+        }
+        if (currentIndex > 1) {
+            int j = resetFunction[currentIndex - 2];
+            if (currentChar == patternChar[j]) {
+                return ++j;
+            } else if (j > 0) {
+                return resetFunction[j - 1];
+            }
+        }
+        return 0;
     }
 
     //Time complexity o(m+n)  m - total chars , n- distinct chars
@@ -61,8 +105,10 @@ public class FAAlgoPatternMatching {
 
     public static void main(String... s) {
         String pattern = "ACACAGA";
+        int[] resetFunctionForPattern = FAAlgoPatternMatching.buildResetTableForPattern(pattern);
+        int numberOfStates = pattern.length();
         char[] distinctChars = distinctChars(pattern);
-        int[][] initialTable = new int[pattern.length()][distinctChars.length];
-        buildFATable(initialTable, pattern.toCharArray(), distinctChars);
+        int[][] initialTable = new int[numberOfStates + 1][distinctChars.length];
+        buildFATable(initialTable, distinctChars, numberOfStates, pattern, resetFunctionForPattern);
     }
 }
